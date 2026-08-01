@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>para a minha pessoa favorita 💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #FFF8F0;
+    --pink: #FFD6E8;
+    --pink-deep: #FF9EC7;
+    --lavender: #E4D9FF;
+    --mint: #D3F8E8;
+    --plum: #4A3B5C;
+    --plum-soft: #7A6690;
+    --coral: #FF8FA3;
+    --gold: #FFD873;
+    --paper: #FFFDF9;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  img{ max-width:100%; height:auto; display:block; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: var(--cream);
+    color: var(--plum);
+    font-family: 'Quicksand', sans-serif;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  h1,h2,h3{ font-family:'Baloo 2', sans-serif; }
+
+  /* ---------- editable data hint ---------- */
+  /* Para trocar as fotos: procure por "PHOTO_SLOT" nos comentários
+     e troque a div.photo-placeholder por uma <img src="sua-foto.jpg">
+     mantendo a classe "polaroid-img" para herdar o estilo. */
+
+  /* ---------- ambient floating decor ---------- */
+  .floaty{
+    position:fixed;
+    pointer-events:none;
+    z-index:0;
+    opacity:0.55;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp{
+    0%{ transform: translateY(110vh) rotate(0deg); }
+    100%{ transform: translateY(-10vh) rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; scroll-behavior:auto !important; }
+  }
+
+  section{
+    position:relative;
+    z-index:1;
+    padding: 90px 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height: 100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding-top: 60px;
+    position:relative;
+  }
+
+  .hero .eyebrow{
+    font-family:'Caveat', cursive;
+    font-size: 1.6rem;
+    color: var(--coral);
+    margin-bottom: 6px;
+    transform: rotate(-2deg);
+  }
+
+  .hero h1{
+    font-size: clamp(2.6rem, 7vw, 5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    color: var(--plum);
+    max-width: 780px;
+  }
+
+  .hero h1 span{
+    color: var(--coral);
+    position:relative;
+    display:inline-block;
+  }
+
+  .hero p.sub{
+    margin-top: 22px;
+    font-size: 1.2rem;
+    color: var(--plum-soft);
+    max-width: 520px;
+  }
+
+  .scroll-hint{
+    margin-top: 56px;
+    font-size: 0.95rem;
+    color: var(--plum-soft);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    animation: bob 2.2s ease-in-out infinite;
+  }
+  @keyframes bob{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(8px); }
+  }
+
+  /* wavy divider */
+  .wave{
+    width:100%;
+    display:block;
+    line-height:0;
+  }
+
+  /* ---------- reveal on scroll ---------- */
+  .reveal{
+    opacity:0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.is-visible{
+    opacity:1;
+    transform: translateY(0);
+  }
+
+  /* ---------- INTRO ---------- */
+  .intro{
+    text-align:center;
+  }
+  .intro h2{
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    margin-bottom: 22px;
+  }
+  .intro p{
+    font-size: 1.15rem;
+    line-height: 1.75;
+    color: var(--plum-soft);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .doodle-divider{
+    display:flex;
+    justify-content:center;
+    gap: 14px;
+    margin: 34px 0;
+    font-size: 1.4rem;
+  }
+
+  /* ---------- CORKBOARD / GALLERY (signature element) ---------- */
+  .corkboard{
+    background: var(--paper);
+    border-radius: 28px;
+    padding: 60px 30px;
+    box-shadow: 0 20px 50px rgba(74,59,92,0.08);
+    position:relative;
+  }
+  .corkboard h2{
+    text-align:center;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    margin-bottom: 10px;
+  }
+  .corkboard > p.lead{
+    text-align:center;
+    color: var(--plum-soft);
+    max-width: 520px;
+    margin: 0 auto 50px;
+  }
+
+  .board-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 46px 30px;
+    padding: 10px 20px;
+  }
+
+  .polaroid{
+    background:#fff;
+    padding: 14px 14px 44px;
+    border-radius: 4px;
+    box-shadow: 0 10px 24px rgba(74,59,92,0.15);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    position:relative;
+    cursor: default;
+  }
+  .polaroid:nth-child(1){ transform: rotate(-6deg); }
+  .polaroid:nth-child(2){ transform: rotate(4deg); }
+  .polaroid:nth-child(3){ transform: rotate(-3deg); }
+  .polaroid:nth-child(4){ transform: rotate(5deg); }
+  .polaroid:nth-child(5){ transform: rotate(-4deg); }
+  .polaroid:nth-child(6){ transform: rotate(3deg); }
+
+  .polaroid:hover{
+    transform: rotate(0deg) translateY(-6px) scale(1.04);
+    box-shadow: 0 18px 34px rgba(74,59,92,0.22);
+    z-index: 5;
+  }
+
+  .tape{
+    position:absolute;
+    top:-14px;
+    left:50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width: 70px;
+    height: 26px;
+    background: linear-gradient(180deg, var(--mint), #bdf3dd);
+    opacity:0.85;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  }
+  .polaroid:nth-child(even) .tape{
+    background: linear-gradient(180deg, var(--pink), var(--pink-deep));
+  }
+
+  .photo-placeholder{
+    width:100%;
+    aspect-ratio: 1 / 1;
+    background: repeating-linear-gradient(135deg, #F3EEFB, #F3EEFB 10px, #EDE6FA 10px, #EDE6FA 20px);
+    border-radius: 2px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:6px;
+    color: var(--plum-soft);
+    font-size:0.8rem;
+    text-align:center;
+    padding: 10px;
+  }
+  .photo-placeholder .icon{ font-size:1.8rem; }
+
+  .polaroid-img{
+    width:100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 2px;
+    display:block;
+  }
+
+  .polaroid figcaption{
+    font-family:'Caveat', cursive;
+    font-size: 1.25rem;
+    text-align:center;
+    margin-top: 10px;
+    color: var(--plum);
+  }
+
+  /* ---------- LETTER / ENVELOPE ---------- */
+  .letter-section{
+    text-align:center;
+  }
+  .letter-section h2{
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    margin-bottom: 34px;
+  }
+
+  .envelope-wrap{
+    display:flex;
+    justify-content:center;
+  }
+
+  .envelope{
+    width: min(340px, 90vw);
+    height: 220px;
+    background: linear-gradient(160deg, var(--lavender), #f3ecff);
+    border-radius: 14px;
+    position:relative;
+    cursor:pointer;
+    box-shadow: 0 16px 34px rgba(74,59,92,0.18);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: transform 0.3s ease;
+  }
+  .envelope:hover{ transform: translateY(-4px); }
+  .envelope::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height: 0;
+    border-left: 170px solid transparent;
+    border-right: 170px solid transparent;
+    border-top: 110px solid #d9c9ff;
+    filter: brightness(1.03);
+  }
+  .envelope .seal{
+    z-index:2;
+    width:52px; height:52px;
+    background: var(--coral);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.4rem;
+    color:#fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+  .envelope .hint{
+    position:absolute;
+    bottom: -34px;
+    font-size:0.9rem;
+    color: var(--plum-soft);
+    font-family:'Caveat', cursive;
+    font-size:1.2rem;
+  }
+
+  .letter-paper{
+    max-width: 560px;
+    margin: 44px auto 0;
+    background: var(--paper);
+    border-radius: 16px;
+    padding: 40px 36px;
+    box-shadow: 0 14px 34px rgba(74,59,92,0.12);
+    text-align:left;
+    font-family:'Caveat', cursive;
+    font-size: 1.5rem;
+    line-height: 1.65;
+    color: var(--plum);
+    display:none;
+  }
+  .letter-paper.open{ display:block; animation: unfold 0.5s ease; }
+  @keyframes unfold{
+    from{ opacity:0; transform: translateY(-14px) scale(0.98); }
+    to{ opacity:1; transform: translateY(0) scale(1); }
+  }
+  .letter-paper .sign{
+    display:block;
+    margin-top: 22px;
+    font-size: 1.7rem;
+    color: var(--coral);
+  }
+
+  /* ---------- NOSSA MÚSICA ---------- */
+  .musica-section{
+    text-align:center;
+  }
+  .musica-section h2{
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    margin-bottom: 10px;
+  }
+  .musica-section .lead{
+    color: var(--plum-soft);
+    max-width: 480px;
+    margin: 0 auto 34px;
+  }
+  .musica-player{
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--paper);
+    padding: 18px;
+    border-radius: 22px;
+    box-shadow: 0 16px 34px rgba(74,59,92,0.12);
+    border: 2px dashed var(--pink);
+  }
+
+  /* ---------- MOTIVOS ---------- */
+  .motivos h2{
+    text-align:center;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    margin-bottom: 44px;
+  }
+  .motivos-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 26px;
+  }
+  .motivo-card{
+    background: var(--paper);
+    border-radius: 18px;
+    padding: 26px 22px;
+    box-shadow: 0 10px 24px rgba(74,59,92,0.08);
+    border: 2px dashed var(--pink);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .motivo-card:hover{
+    transform: translateY(-4px);
+    border-color: var(--coral);
+  }
+  .motivo-card .emoji{ font-size: 1.6rem; margin-bottom: 10px; display:block; }
+  .motivo-card p{ color: var(--plum-soft); line-height:1.5; font-size:0.98rem; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    text-align:center;
+    padding: 70px 24px 90px;
+    position:relative;
+    z-index:1;
+  }
+  footer h3{
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    margin-bottom: 18px;
+  }
+  footer p{
+    color: var(--plum-soft);
+    margin-bottom: 30px;
+  }
+
+  .confetti-btn{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size: 1.05rem;
+    color:#fff;
+    background: linear-gradient(135deg, var(--coral), var(--pink-deep));
+    border:none;
+    padding: 16px 34px;
+    border-radius: 999px;
+    cursor:pointer;
+    box-shadow: 0 12px 24px rgba(255,143,163,0.4);
+    transition: transform 0.2s ease;
+  }
+  .confetti-btn:hover{ transform: scale(1.05); }
+  .confetti-btn:active{ transform: scale(0.97); }
+
+  footer .made-with{
+    margin-top: 50px;
+    font-size:0.85rem;
+    color: var(--plum-soft);
+    opacity:0.7;
+  }
+
+  #confetti-canvas{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index: 50;
+  }
+
+  :focus-visible{
+    outline: 3px solid var(--coral);
+    outline-offset: 3px;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- decor flutuante ambiente (poucos elementos, sutil) -->
+<div class="floaty" style="left:8%; font-size:1.6rem; animation-duration:16s;">💗</div>
+<div class="floaty" style="left:80%; font-size:1.2rem; animation-duration:22s; animation-delay:-6s;">✨</div>
+<div class="floaty" style="left:45%; font-size:1.4rem; animation-duration:19s; animation-delay:-10s;">🩷</div>
+<div class="floaty" style="left:65%; font-size:1rem; animation-duration:24s; animation-delay:-3s;">⭐</div>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <p class="eyebrow">um cantinho da internet só nosso</p>
+  <h1>pra minha <span>pessoa favorita</span>, com carinho</h1>
+  <p class="sub">Um lugar bobo, fofo e cheio de coisa boa — feito só pra lembrar você de todos os motivos pelos quais nossa amizade é das melhores partes da minha vida.</p>
+  <div class="scroll-hint">
+    <span>desce um pouquinho</span>
+    <span>↓</span>
+  </div>
+</section>
+
+<svg class="wave" viewBox="0 0 1440 100" preserveAspectRatio="none" style="height:80px;">
+  <path fill="#FFD6E8" fill-opacity="0.5" d="M0,40 C240,90 480,0 720,30 C960,60 1200,100 1440,50 L1440,100 L0,100 Z"></path>
+</svg>
+
+<!-- ================= INTRO ================= -->
+<section class="intro reveal">
+  <h2>por que esse site existe</h2>
+  <div class="doodle-divider">🌸 · 🩶 · 🌸</div>
+  <p>
+    Você sabe que eu não sou de fazer essas coisas fofinhas, mas queria deixar registrado em algum lugar o quanto a nossa amizade significa pra mim. Então, fiz esse cantinho da internet só pra você, com algumas lembranças nossas e um recadinho especial no final.
+  </p>
+</section>
+
+<!-- ================= CORKBOARD / FOTOS ================= -->
+<section class="reveal">
+  <div class="corkboard">
+    <h2>nossos momentos 📌</h2>
+    <p class="lead">Um mural com pedacinhos da nossa história (as fotos de verdade entram assim que você me mandar!).</p>
+
+    <div class="board-grid">
+      <!-- PHOTO_SLOT 1 -->
+      <figure class="polaroid">
+        <div class="tape"></div>
+        <img src="fotos/foto1.JPEG" alt="aquele dia inesquecível" class="polaroid-img">
+        <figcaption>aquele dia inesquecível</figcaption>
+      </figure>
+
+      <!-- PHOTO_SLOT 2 -->
+      <figure class="polaroid">
+        <div class="tape"></div>
+        <img src="fotos/foto2.JPEG" alt="aquele dia inesquecível" class="polaroid-img">
+        <figcaption>rindo à toa, como sempre</figcaption>
+      </figure>
+
+      <!-- PHOTO_SLOT 3 -->
+      <figure class="polaroid">
+        <div class="tape"></div>
+        <img src="fotos/foto3.JPEG" alt="a viagem que não saiu do plano" class="polaroid-img">
+        <figcaption>a viagem que não saiu do plano</figcaption>
+      </figure>
+
+      <!-- PHOTO_SLOT 4 -->
+      <figure class="polaroid">
+        <div class="tape"></div>
+        <img src="fotos/foto4.JPEG" alt="madrugada de conversa boa" class="polaroid-img">
+        <figcaption>madrugada de conversa boa</figcaption>
+      </figure>
+
+      <!-- PHOTO_SLOT 5 -->
+      <figure class="polaroid">
+        <div class="tape"></div>
+        <img src="fotos/foto5.JPEG" alt="fotinhas no espelho" class="polaroid-img">
+        <figcaption>fotinhas no espelho</figcaption>
+      </figure>
+
+      <!-- PHOTO_SLOT 6 -->
+      <figure class="polaroid">
+        <div class="tape"></div>
+        <img src="fotos/foto6.JPEG" alt="meu momento favorito com você" class="polaroid-img">
+        <figcaption>meu momento favorito com você</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CARTA ================= -->
+<section class="letter-section reveal">
+  <h2>uma cartinha que você ja conhece, mas quis deixar eternizada  💌</h2>
+  <div class="envelope-wrap">
+    <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Clique para abrir a carta">
+      <div class="seal">💌</div>
+      <span class="hint">clique pra abrir</span>
+    </div>
+  </div>
+
+  <div class="letter-paper" id="letterPaper">
+    <p>
+      Fala comigo, moça. <br><br>
+      Sabe, dizem que o tempo é relativo, e a gente é a prova viva disso. Como é que pode fazer só um ano e meio que você apareceu, se eu sinto que te conheço desde sempre? Olho para trás e vejo a gente em Guarapari, o frio de Domingos Martins, e as tardes na sua casa que eram o meu refúgio toda semana antes de eu vir para São Paulo... parece que vivemos uma vida inteira nesses registros.
+
+Você tem esse superpoder que me assusta e me encanta: sua capacidade de ler as pessoas e o dom de usar as palavras certas no momento exato. Inclusive, você me lê tão bem que já perdeu a conta de quantas vezes me chamou de "grosso e pa pum", e, bom, a gente sabe que eu raramente erro, né? É esse seu olhar que não deixa passar nada que faz de você essa conselheira impecável e a pessoa que melhor me entende no mundo.
+
+Quero ser muito honesto e sentimental hoje: a gente sabe que nossa história teve capítulos diferentes. Tentamos um caminho, e a vida, com essa distância e o timing do mundo, nos mostrou que o "agora" pedia outra coisa. Mas, como eu sempre te digo: "Dê tempo ao tempo". O que é nosso sempre encontra um jeito, e enquanto isso, o que a gente construiu é valioso demais para não ser celebrado todos os dias.
+
+Eu continuo te amando da mesma forma, com a mesma intensidade, mas com a paz de saber que você é a minha melhor escolha de companhia, seja como for e onde for. Sinto falta de estar perto, mas te carrego em cada conversa e em cada pensamento meu aqui em SP.
+
+Que seu novo ciclo seja tão gigante quanto o seu coração e tão certeiro quanto as suas palavras e decisões. Parabéns por ser exatamente quem você é. Tô aqui torcendo por você, hoje e sempre.
+
+Fé fé, minha eterna Marcela Lopes! ❤️
+      <span class="sign">com todo carinho, DG 🩷</span>
+    </p>
+  </div>
+</section>
+
+<!-- ================= NOSSA MÚSICA ================= -->
+<section class="musica-section reveal">
+  <h2>nossa música 🎶</h2>
+  <p class="lead">Essa aqui é a nossa. Toda vez que toca, é impossível não lembrar de você.</p>
+
+  <div class="musica-player">
+    <!-- YOUTUBE_SLOT: vídeo da nossa música -->
+    <iframe
+      style="border-radius:16px; aspect-ratio: 16/9; width:100%; height:auto;"
+      src="https://www.youtube.com/embed/WRxwtV_x8nM"
+      title="nossa música"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen
+      loading="lazy">
+    </iframe>
+  </div>
+</section>
+
+<!-- ================= MOTIVOS ================= -->
+<section class="motivos reveal">
+  <h2>alguns motivos, entre tantos</h2>
+  <div class="motivos-grid">
+    <div class="motivo-card">
+      <span class="emoji">🎈</span>
+      <p>Porque qualquer dia chato que tenha sua presença melhora 100%.</p>
+    </div>
+    <div class="motivo-card">
+      <span class="emoji">☕</span>
+      <p>Porque todos os infinitos momentos juntos, nunca parecem serem o suficiente.</p>
+    </div>
+    <div class="motivo-card">
+      <span class="emoji">🫂</span>
+      <p>Porque nos meus piores momentos, foi seu nome que apareceu primeiro na minha cabeça.</p>
+    </div>
+    <div class="motivo-card">
+      <span class="emoji">🎉</span>
+      <p>Porque você comemora minhas conquistas como se fossem suas — e isso não tem preço.</p>
+    </div>
+    <div class="motivo-card">
+      <span class="emoji">🌈</span>
+      <p>Porque com você eu posso ser exatamente quem eu sou, sem mudar nada.</p>
+    </div>
+    <div class="motivo-card">
+      <span class="emoji">💫</span>
+      <p>Porque, no fim das contas, você é melhor companhia que eu poderia ter.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="reveal">
+  <h3>é isso, espero ter gostado dessa viadagem 🩷</h3>
+  <p>Feito com carinho (e alguns emojis a mais do que o necessário).</p>
+  <button class="confetti-btn" id="confettiBtn">solta uma comemoração 🎊</button>
+  <p class="made-with">um sitezinho feito só pra você</p>
+</footer>
+
+<script>
+  // ---------- scroll reveal ----------
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el=> io.observe(el));
+
+  // ---------- envelope open ----------
+  const envelope = document.getElementById('envelope');
+  const letterPaper = document.getElementById('letterPaper');
+  function openLetter(){
+    letterPaper.classList.add('open');
+    letterPaper.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+  envelope.addEventListener('click', openLetter);
+  envelope.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openLetter(); }
+  });
+
+  // ---------- confetti ----------
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  function resizeCanvas(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  const colors = ['#FF8FA3', '#FFD6E8', '#E4D9FF', '#D3F8E8', '#FFD873'];
+  let particles = [];
+
+  function burstConfetti(){
+    for(let i=0; i<90; i++){
+      particles.push({
+        x: canvas.width/2,
+        y: canvas.height,
+        vx: (Math.random()-0.5) * 14,
+        vy: -(Math.random()*14 + 8),
+        size: Math.random()*8 + 4,
+        color: colors[Math.floor(Math.random()*colors.length)],
+        rotation: Math.random()*360,
+        vr: (Math.random()-0.5) * 10,
+        life: 0
+      });
+    }
+    if(!animating){ animating = true; animate(); }
+  }
+
+  let animating = false;
+  function animate(){
+    ctx.clearRect(0,0,canvas.width, canvas.height);
+    particles.forEach(p=>{
+      p.vy += 0.35; // gravidade
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rotation += p.vr;
+      p.life++;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation * Math.PI/180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size*0.6);
+      ctx.restore();
+    });
+    particles = particles.filter(p=> p.y < canvas.height + 40 && p.life < 260);
+    if(particles.length > 0){
+      requestAnimationFrame(animate);
+    } else {
+      animating = false;
+      ctx.clearRect(0,0,canvas.width, canvas.height);
+    }
+  }
+
+  document.getElementById('confettiBtn').addEventListener('click', burstConfetti);
+</script>
+
+</body>
+</html>
